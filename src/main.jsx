@@ -1,7 +1,7 @@
 /* eslint-env browser */
 import React    from 'react';
 import ReactDOM from 'react-dom';
-import 'bulma/css/bulma.css';
+import 'bulma/bulma.sass';
 
 import App from './components/App';
 

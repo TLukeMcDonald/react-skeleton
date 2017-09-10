@@ -9,18 +9,17 @@ const BUILD_DIR         = path.resolve(__dirname, 'dist');
 const APP_DIR           = path.resolve(__dirname, 'src');
 
 const fontLoaderConfig = {
-  loader:  'url-loader',
-  options: {
-    name:  '/fonts/[name].[ext]',
-    limit: 100,
-  },
+  name:  '/fonts/[name].[ext]',
+  limit: 100,
 };
 
 // let's bring in local environmental variables
 if (!('NODE_ENV' in process.env)) require('dotenv').config();
 
 const config = {
-  entry:  `${APP_DIR}/main.jsx`,
+  entry:  {
+    main: `${APP_DIR}/main.jsx`,
+  },
   output: {
     path:     BUILD_DIR,
     filename: 'js/[name].js',
@@ -35,6 +34,12 @@ const config = {
     extensions: ['.js', '.jsx'],
   },
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin({
+      names:     ['common', 'main'],
+      minChunks: Infinity,
+      children:  true,
+      async:     true,
+    }),
     new CleanWebpackPlugin(['dist']),
     new webpack.LoaderOptionsPlugin({
       debug: true,
@@ -58,6 +63,13 @@ const config = {
 
   module: {
     rules: [
+      {
+        test: /\.sass$/,
+        use:  ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use:      'css-loader!sass-loader',
+        }),
+      },
       {
         test: /\.jsx?$/,
         use:  [{
@@ -143,11 +155,9 @@ if (process.env &&
         comments: false,
       },
     }),
-    new webpack.optimize.CommonsChunkPlugin('/js/common.js'),
   ];
 
   config.plugins = config.plugins.concat(prodPlugins);
-
   config.cache = false;
   config.debug = false;
   config.devtool = undefined;
