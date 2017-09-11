@@ -17,7 +17,7 @@ const fontLoaderConfig = {
 if (!('NODE_ENV' in process.env)) require('dotenv').config();
 
 const config = {
-  entry:  {
+  entry: {
     main: `${APP_DIR}/main.jsx`,
   },
   output: {
@@ -64,7 +64,7 @@ const config = {
   module: {
     rules: [
       {
-        test: /\.sass$/,
+        test: /\.s(a|c)ss$/,
         use:  ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use:      'css-loader!sass-loader',
