@@ -1,16 +1,24 @@
-import React from 'react';
+import React  from 'react';
+import faker  from 'faker';
 import Nav    from './Nav';
 import Hero   from './Hero';
 import Footer from './Footer';
 import Bones  from './Bones';
 import './App.css';
 
+
+
+
 export default class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      name: 'Jason Seminara',
+      cards: Array(4).fill(0).map(() => ({
+        ...faker.helpers.createCard(),
+        id: faker.random.uuid(),
+        img: faker.image.avatar(),
+      })),
     };
   }
 
@@ -21,9 +29,9 @@ export default class App extends React.Component {
         <Hero />
         <div className="container">
           <div className="columns">
-            <Bones {...this.state}/>
-            <Bones {...this.state}/>
-            <Bones {...this.state}/>
+            {this.state.cards.map(card =>
+              <Bones key={card.id} {...card}/>
+            )}
           </div>
         </div>
         <Footer />
